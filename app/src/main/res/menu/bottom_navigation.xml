@@ -12,13 +12,13 @@
             android:title="@string/title_search" />
 
         <item
-            android:id="@+id/navigation_rankings"
+            android:id="@+id/navigation_list"
             android:icon="@drawable/ic_list_black_24dp"
             android:title="@string/title_list" />
 
         <item
-            android:id="@+id/navigation_fit"
+            android:id="@+id/navigation_target"
             android:icon="@drawable/ic_target_black_24dp"
-            android:title="@string/title_fit" />
+            android:title="@string/title_target" />
 
 </menu>
