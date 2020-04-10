@@ -154,7 +154,7 @@ public class SearchFragment extends Fragment {
                 int costInt = (int) schoolInfo.get("latest.cost.attendance.academic_year");
                 double debtDub = (double) schoolInfo.get("latest.aid.median_debt.completers.overall");
 
-                final University dream = new University(schoolName, highEnglish+highMath,lowEnglish+lowMath, 0.0, 0.0);
+                final University dream = new University(schoolName, highEnglish+highMath, lowEnglish+lowMath, 0.0, 0.0);
 
                 name.setText(schoolName);
                 sat.setText("SAT Range: " + (lowEnglish + lowMath) + " to " + (highEnglish + highMath));
