@@ -123,11 +123,11 @@ public class HomeFragment extends Fragment {
             }
             JSONObject scores = new JSONObject(content.toString());
             if(StringUtils.isNumeric(scores.get("SAT").toString())) {
-                Log.d("TAG", ""+scores.get("SAT"));
+                Log.d("TAG", "" + scores.get("SAT"));
                 satTv.setText("" + scores.get("SAT"));
             }
             if(StringUtils.isNumeric(scores.get("ACT").toString())) {
-                Log.d("TAG", ""+scores.get("ACT"));
+                Log.d("TAG", "" + scores.get("ACT"));
                 actTv.setText("" + scores.get("ACT"));
             }
         } catch (IOException | JSONException e) {
