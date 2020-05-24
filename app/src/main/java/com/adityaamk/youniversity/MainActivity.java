@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     ListFragment listFragment;
     GraphFragment graphFragment;
     Fragment fragment;
-
+    //asdadsad
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
