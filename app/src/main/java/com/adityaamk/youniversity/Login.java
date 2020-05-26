@@ -76,7 +76,7 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else {
-                            Toast.makeText(Login.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
 
@@ -99,8 +99,8 @@ public class Login extends AppCompatActivity {
 
                 final EditText resetMail = new EditText(v.getContext());
                 final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                passwordResetDialog.setTitle("Reset Password ?");
-                passwordResetDialog.setMessage("Enter Your Email To Received Reset Link.");
+                passwordResetDialog.setTitle("Need to Reset Password?");
+                passwordResetDialog.setMessage("Enter Email to Receive Reset Link");
                 passwordResetDialog.setView(resetMail);
 
                 passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -111,12 +111,12 @@ public class Login extends AppCompatActivity {
                         fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(Login.this, "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, "Reset Link Sent to Your Email.", Toast.LENGTH_LONG).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(Login.this, "Error ! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, "Error! Reset Link Did Not Send. " + e.getMessage(), Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);
                             }
                         });

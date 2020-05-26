@@ -17,8 +17,8 @@
             android:title="@string/title_list" />
 
         <item
-            android:id="@+id/navigation_target"
-            android:icon="@drawable/ic_target_black_24dp"
+            android:id="@+id/profile_target"
+            android:icon="@drawable/ic_account_circle_black_24dp"
             android:title="@string/title_target" />
 
 </menu>

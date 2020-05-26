@@ -55,11 +55,6 @@ public class Register extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressBar);
 
-//        if(fAuth.getCurrentUser() != null){
-//            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-//            finish();
-//        }
-
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +69,11 @@ public class Register extends AppCompatActivity {
                 String password = mPassword.getText().toString().trim();
                 final String fullName = mFullName.getText().toString().trim();
                 final String phone    = mPhone.getText().toString().trim();
+
+                if(TextUtils.isEmpty(fullName)){
+                    mEmail.setError("Full Name is Required.");
+                    return;
+                }
 
                 if(TextUtils.isEmpty(email)){
                     mEmail.setError("Email is Required.");
@@ -101,12 +101,12 @@ public class Register extends AppCompatActivity {
 
                             // send verification link
 
-                            FirebaseUser fuser = fAuth.getCurrentUser();
-                            assert fuser != null;
-                            fuser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            FirebaseUser firebaseUser = fAuth.getCurrentUser();
+                            assert firebaseUser != null;
+                            firebaseUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(Register.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Register.this, "Verification Email Successfully Sent.", Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -138,7 +138,7 @@ public class Register extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
                         }else {
-                            Toast.makeText(Register.this, "Error ! " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this, "Error! " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }
