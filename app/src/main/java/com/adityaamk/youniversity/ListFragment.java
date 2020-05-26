@@ -3,6 +3,7 @@ package com.adityaamk.youniversity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,10 +25,18 @@ import java.util.Objects;
 
 public class ListFragment extends Fragment {
     private ArrayList<University> universities;
+    private ArrayList<Object> unisObjects;
     private CustomAdapter customAdapter;
+    private TinyDB tinydb;
 
     void updateList(ArrayList<University> unis){
         universities = unis;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //tinydb.putListObject("UNI_KEY", universities);
     }
 
     void updateList2(ArrayList<University> unis){
