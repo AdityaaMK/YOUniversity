@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,15 +39,14 @@ import java.util.jar.Attributes;
 public class SearchFragment extends Fragment {
     private EditText user;
     private Button add;
-    private TextView name, rate, sat, act, cost, debt;
+    private TextView name, rate, sat, act, cost, debt, tuitinstate, tuitoutstate, locale, schoolURL, npcURL;
     private ArrayList<University> universities;
     private String input, request;
     private StringBuilder content;
     private JSONObject data;
     private SearchFragmentListener searchFragmentListener;
 
-    String url = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=princeton+university&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall&api_key=9DCEOKfwyuInWXJ8GTLRrEiudCqu3uZjMEMzM4Vd";
-
+    String url = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=princeton+university&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
 
     public interface SearchFragmentListener{
         public void sendData(ArrayList<University> schools);
@@ -89,6 +89,11 @@ public class SearchFragment extends Fragment {
         act = view.findViewById(R.id.id_act);
         cost = view.findViewById(R.id.id_cost);
         debt = view.findViewById(R.id.id_debt);
+        tuitinstate = view.findViewById(R.id.id_tuitInState);
+        tuitoutstate = view.findViewById(R.id.id_tuitOutState);
+        locale = view.findViewById(R.id.id_locale);
+        schoolURL = view.findViewById(R.id.id_schoolurl);
+        npcURL = view.findViewById(R.id.id_NPCurl);
 
         user.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +137,7 @@ public class SearchFragment extends Fragment {
             try {
                 String encode = URLEncoder.encode(input[0], "UTF-8");
                 Log.d("TAG", encode);
-                request = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=" + encode + "&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
+                request = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=" + encode + "&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall,school.school_url,school.price_calculator_url,school.locale,latest.cost.tuition.in_state,latest.cost.tuition.out_of_state&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
                 Log.d("TAG", request);
                 URL url = new URL(request);
                 URLConnection urlConnection = url.openConnection();
@@ -166,6 +171,7 @@ public class SearchFragment extends Fragment {
             }
         }
     }
+
     @SuppressLint("StaticFieldLeak")
     public class UniversityData extends AsyncTask<String, Void, Void> {
         @Override
@@ -184,37 +190,56 @@ public class SearchFragment extends Fragment {
                 double highMath = (double) schoolInfo.get("latest.admissions.sat_scores.75th_percentile.math");
                 int costInt = (int) schoolInfo.get("latest.cost.attendance.academic_year");
                 double debtDub = (double) schoolInfo.get("latest.aid.median_debt.completers.overall");
+                String Homepage = (String) schoolInfo.get("school.school_url");
+                String NPC = (String) schoolInfo.get("school.price_calculator_url");
+                int tuitionIN = (int) schoolInfo.get("latest.cost.tuition.in_state");
+                int tuitionOUT = (int) schoolInfo.get("latest.cost.tuition.out_of_state");
+                int localeINFO = (int) schoolInfo.get("school.locale");
 
-                final University dream = new University(schoolName, highEnglish+highMath, lowEnglish+lowMath, 0.0, 0.0);
+
+                final University dream = new University(schoolName);
 
                 name.setText(schoolName);
-                sat.setText("SAT Range: " + (lowEnglish + lowMath) + " to " + (highEnglish + highMath));
+                sat.setText("Safe SAT Range (25th to 75th percentile): " + (lowEnglish + lowMath) + " to " + (highEnglish + highMath));
                 cost.setText("Cost of Attendance: $" + costInt);
                 debt.setText("Average Debt: $"  + debtDub);
                 rate.setText("Admissions Rate: " + (admitRate*100));
-                add.setOnClickListener(new View.OnClickListener() {
+                npcURL.setText("Net Price Calculator: " + NPC);
+                schoolURL.setText("School Homepage: " + Homepage);
+                tuitinstate.setText("Tuition (in-state): $"  + tuitionIN);
+                tuitoutstate.setText("Tuition (out-of-state): $"  + tuitionOUT);
+                if(localeINFO == 11 || localeINFO == 12 || localeINFO == 13)
+                    locale.setText("Locale: City");
+                else if(localeINFO == 21 || localeINFO == 22 || localeINFO == 23)
+                    locale.setText("Locale: Suburb");
+                else if(localeINFO == 31 || localeINFO == 32 || localeINFO == 33)
+                    locale.setText("Locale: Town");
+                else if(localeINFO == 41 || localeINFO == 42 || localeINFO == 43)
+                    locale.setText("Locale: Rural");
+
+                    add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Toast.makeText(getContext(),"Added!", Toast.LENGTH_SHORT).show();
-                        universities.add(dream);
-                        sendList();
-                        Log.d("TAG",dream+"");
-                        Log.d("Tag",universities+"");
-                        Log.d("TAg",universities.get(0).getName());
+                        if(!universities.contains(dream)) {
+                            universities.add(dream);
+                            sendList();
+                            Log.d("TAG", dream + "");
+                            Log.d("Tag", universities + "");
+                            Log.d("TAg", universities.get(0).getName());
+                        }
                     }
                 });
 
                 try {
                     double lowACT = (double) schoolInfo.get("latest.admissions.act_scores.25th_percentile.cumulative");
                     double highACT = (double) schoolInfo.get("latest.admissions.act_scores.75th_percentile.cumulative");
-                    dream.setActHigh(highACT);
-                    dream.setActLow(lowACT);
-                    act.setText("ACT Range: "+lowACT+" to "+highACT);
+                    act.setText("Safe ACT Range (25th to 75th percentile): "+lowACT+" to "+highACT);
                 } catch (ClassCastException e){
                     act.setText("ACT Range: N/A");
                 }
 
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -225,7 +250,7 @@ public class SearchFragment extends Fragment {
             try {
                 String encode = URLEncoder.encode(input[0], "UTF-8");
                 Log.d("TAG", encode);
-                request = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=" + encode + "&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
+                request = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=" + encode + "&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall,school.school_url,school.price_calculator_url,school.locale,latest.cost.tuition.in_state,latest.cost.tuition.out_of_state&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
                 Log.d("TAG", request);
                 URL url = new URL(request);
                 URLConnection urlConnection = url.openConnection();

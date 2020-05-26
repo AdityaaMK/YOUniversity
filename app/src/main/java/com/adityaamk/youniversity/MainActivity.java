@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public void sendData(ArrayList<University> schools) {
         universities.addAll(schools);
         listFragment.updateList(universities);
-        //graphFragment.updateList(universities);
+        graphFragment.updateList(universities);
     }
 
     @Override

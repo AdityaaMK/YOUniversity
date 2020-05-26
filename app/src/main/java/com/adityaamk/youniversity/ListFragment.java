@@ -1,5 +1,6 @@
 package com.adityaamk.youniversity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ import java.util.Objects;
 
 public class ListFragment extends Fragment {
     private ArrayList<University> universities;
-    CustomAdapter customAdapter;
+    private CustomAdapter customAdapter;
 
     void updateList(ArrayList<University> unis){
         universities = unis;
@@ -59,25 +60,27 @@ public class ListFragment extends Fragment {
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            View layoutView = layoutInflater.inflate(R.layout.layout_listitem,null);
+            @SuppressLint("ViewHolder") View layoutView = layoutInflater.inflate(R.layout.layout_listitem,null);
             TextView rank = layoutView.findViewById(R.id.id_rank);
             TextView name = layoutView.findViewById(R.id.id_name);
             Button change = layoutView.findViewById(R.id.id_change);
+            Button delete = layoutView.findViewById(R.id.id_del);
             change.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
                         openDialog();
-
-//                        University temp = universities.get(position);
-//                        University temp2 = universities.get(position-1);
-//                        universities.set(position,temp2);
-//                        universities.set(position-1,temp);
-//                        notifyDataSetChanged();
                     }catch (IndexOutOfBoundsException e){
                         e.printStackTrace();
                     }
 
+                }
+            });
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    universities.remove(position);
+                    notifyDataSetChanged();
                 }
             });
             name.setText(universities.get(position).getName());
