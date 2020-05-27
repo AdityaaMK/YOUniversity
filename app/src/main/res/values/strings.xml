@@ -4,4 +4,9 @@
     <string name="title_search">Search</string>
     <string name="title_list">My List</string>
     <string name="title_target">My Profile</string>
+    <string name="checkbox">com.adityaamk.youniversity.checkbox</string>
+    <string name="name">com.adityaamk.youniversity.name</string>
+    <string name="password">com.adityaamk.youniversity.password</string>
+    <string name="list">com.adityaamk.youniversity.list</string>
+
 </resources>

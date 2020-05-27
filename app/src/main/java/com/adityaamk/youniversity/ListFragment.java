@@ -2,9 +2,11 @@ package com.adityaamk.youniversity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Presentation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,40 +21,50 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ListFragment extends Fragment {
-    private ArrayList<University> universities;
-    private ArrayList<Object> unisObjects;
+    private ArrayList<University> universities, uni2;
     private CustomAdapter customAdapter;
-    private TinyDB tinydb;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private Button save;
 
     void updateList(ArrayList<University> unis){
-        universities = unis;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        //tinydb.putListObject("UNI_KEY", universities);
+        universities.addAll(unis);
     }
 
     void updateList2(ArrayList<University> unis){
-        universities = unis;
+        universities.addAll(unis);
         customAdapter.notifyDataSetChanged();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rankFragmentView = inflater.inflate(R.layout.fragment_list, container, false);
-        ListView listView = rankFragmentView.findViewById(R.id.id_lv);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        ListView listView = view.findViewById(R.id.id_lv);
+        save = view.findViewById(R.id.button2);
+                sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                final Gson gson = new Gson();
+                String json = sharedPreferences.getString(getString(R.string.project_id), null);
+                Type type = new TypeToken<ArrayList<University>>() {}.getType();
+                universities = gson.fromJson(json, type);
+//                if (universities == null) {
+//                    universities = new ArrayList<>();
+//                }
 
         customAdapter = new CustomAdapter(Objects.requireNonNull(getContext()),R.layout.layout_listitem,universities);
         if(universities!=null) listView.setAdapter(customAdapter);
-        return rankFragmentView;
+        return view;
     }
 
     public class CustomAdapter extends ArrayAdapter<University> {

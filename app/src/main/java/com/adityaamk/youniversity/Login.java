@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +32,23 @@ public class Login extends AppCompatActivity {
     TextView mCreateBtn,forgotTextLink;
     ProgressBar progressBar;
     FirebaseAuth fAuth;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    CheckBox checkBox;
+
+    private void checkSharedPreferences(){
+        String check = sharedPreferences.getString(getString(R.string.checkbox), "False");
+        String name = sharedPreferences.getString(getString(R.string.name), "");
+        String password = sharedPreferences.getString(getString(R.string.password), " ");
+
+        mEmail.setText(name);
+        mPassword.setText(password);
+
+        if(check.equals("True"))
+            checkBox.setChecked(true);
+        else
+            checkBox.setChecked(false);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +62,12 @@ public class Login extends AppCompatActivity {
         mLoginBtn = findViewById(R.id.loginBtn);
         mCreateBtn = findViewById(R.id.createText);
         forgotTextLink = findViewById(R.id.forgotPassword);
+        checkBox = findViewById(R.id.checkBox);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = sharedPreferences.edit();
+
+        checkSharedPreferences();
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +91,19 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
+                if(checkBox.isChecked()){
+                    editor.putString(getString(R.string.checkbox), "True");
+                    editor.putString(getString(R.string.name), email);
+                    editor.putString(getString(R.string.password), password);
+                    editor.apply();
+                }
+                else{
+                    editor.putString(getString(R.string.checkbox), "False");
+                    editor.putString(getString(R.string.name), "");
+                    editor.putString(getString(R.string.password), "");
+                    editor.apply();
+                }
+
                 progressBar.setVisibility(View.VISIBLE);
 
                 // authenticate the user
@@ -75,6 +114,7 @@ public class Login extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                         }else {
                             Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
@@ -90,6 +130,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),Register.class));
+                finish();
             }
         });
 

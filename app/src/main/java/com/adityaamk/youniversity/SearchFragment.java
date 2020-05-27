@@ -3,8 +3,10 @@ package com.adityaamk.youniversity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
@@ -21,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +38,10 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.jar.Attributes;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SearchFragment extends Fragment {
     private EditText user;
@@ -45,6 +52,8 @@ public class SearchFragment extends Fragment {
     private StringBuilder content;
     private JSONObject data;
     private SearchFragmentListener searchFragmentListener;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     String url = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=princeton+university&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
 
@@ -224,6 +233,12 @@ public class SearchFragment extends Fragment {
                         if(!universities.contains(dream)) {
                             universities.add(dream);
                             sendList();
+                            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            editor = sharedPreferences.edit();
+                            final Gson gson = new Gson();
+                            String json = gson.toJson(universities);
+                            editor.putString(getString(R.string.project_id), json);
+                            editor.apply();
                             Log.d("TAG", dream + "");
                             Log.d("Tag", universities + "");
                             Log.d("TAg", universities.get(0).getName());
