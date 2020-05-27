@@ -39,11 +39,11 @@ public class ListFragment extends Fragment {
     private Button save;
 
     void updateList(ArrayList<University> unis){
-        universities.addAll(unis);
+        universities = unis;
     }
 
     void updateList2(ArrayList<University> unis){
-        universities.addAll(unis);
+        universities = unis;
         customAdapter.notifyDataSetChanged();
     }
 
@@ -101,6 +101,12 @@ public class ListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     universities.remove(position);
+                    sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    editor = sharedPreferences.edit();
+                    final Gson gson = new Gson();
+                    String json = gson.toJson(universities);
+                    editor.putString(getString(R.string.project_id), json);
+                    editor.apply();
                     notifyDataSetChanged();
                 }
             });

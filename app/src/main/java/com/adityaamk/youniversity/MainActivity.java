@@ -4,11 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, SearchFragment.SearchFragmentListener, ChangeDIalog.ChangeDialogListener {
@@ -50,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         listFragment = new ListFragment();
         graphFragment = new GraphFragment();
         universities = new ArrayList<>();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final Gson gson = new Gson();
+        String json = sharedPreferences.getString(getString(R.string.project_id), null);
+        Type type = new TypeToken<ArrayList<University>>() {}.getType();
+        universities = gson.fromJson(json, type);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(this);
     }
@@ -70,5 +80,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         universities.set(one-1,temp2);
         universities.set(two-1,temp);
         listFragment.updateList2(universities);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        final Gson gson = new Gson();
+        String json = gson.toJson(universities);
+        editor.putString(getString(R.string.project_id), json);
+        editor.apply();
     }
 }

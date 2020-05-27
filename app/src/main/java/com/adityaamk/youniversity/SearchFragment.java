@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -33,6 +34,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -54,6 +56,34 @@ public class SearchFragment extends Fragment {
     private SearchFragmentListener searchFragmentListener;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+
+//    void updateList(ArrayList<University> unis){
+//        universities = unis;
+//        Log.d("TAGGS", ""+universities);
+//    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        editor = sharedPreferences.edit();
+        final Gson gson = new Gson();
+        String json = gson.toJson(universities);
+        editor.putString(getString(R.string.common_google_play_services_enable_button), json);
+        editor.apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Gson gson = new Gson();
+        String json = sharedPreferences.getString(getString(R.string.common_google_play_services_enable_button), null);
+        Type type = new TypeToken<ArrayList<University>>() {}.getType();
+        if(gson.fromJson(json, type)!=null) {
+            universities = gson.fromJson(json, type);
+        }
+    }
 
     String url = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=princeton+university&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
 
@@ -103,6 +133,14 @@ public class SearchFragment extends Fragment {
         locale = view.findViewById(R.id.id_locale);
         schoolURL = view.findViewById(R.id.id_schoolurl);
         npcURL = view.findViewById(R.id.id_NPCurl);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Gson gson = new Gson();
+        String json = sharedPreferences.getString(getString(R.string.common_google_play_services_enable_button), null);
+        Type type = new TypeToken<ArrayList<University>>() {}.getType();
+        if(gson.fromJson(json, type)!=null) {
+            universities = gson.fromJson(json, type);
+        }
 
         user.setOnClickListener(new View.OnClickListener() {
             @Override
