@@ -177,6 +177,7 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    //Showing Name Preview when university name is entered
     public class NameGuide extends  AsyncTask<String, Void, Void>{
 
         @Override
@@ -219,6 +220,7 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    //Getting Stats
     @SuppressLint("StaticFieldLeak")
     public class UniversityData extends AsyncTask<String, Void, Void> {
         @Override
@@ -247,7 +249,7 @@ public class SearchFragment extends Fragment {
                 final University dream = new University(schoolName);
 
                 name.setText(schoolName);
-                sat.setText("Safe SAT Range (25th to 75th percentile): " + (lowEnglish + lowMath) + " to " + (highEnglish + highMath));
+                sat.setText("Target SAT Range (25th to 75th percentile): " + (lowEnglish + lowMath) + " to " + (highEnglish + highMath));
                 cost.setText("Cost of Attendance: $" + costInt);
                 debt.setText("Average Debt: $"  + debtDub);
                 rate.setText("Admissions Rate: " + (admitRate*100));
@@ -287,7 +289,7 @@ public class SearchFragment extends Fragment {
                 try {
                     double lowACT = (double) schoolInfo.get("latest.admissions.act_scores.25th_percentile.cumulative");
                     double highACT = (double) schoolInfo.get("latest.admissions.act_scores.75th_percentile.cumulative");
-                    act.setText("Safe ACT Range (25th to 75th percentile): "+lowACT+" to "+highACT);
+                    act.setText("Target ACT Range (25th to 75th percentile): "+lowACT+" to "+highACT);
                 } catch (ClassCastException e){
                     act.setText("ACT Range: N/A");
                 }
