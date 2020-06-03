@@ -2,40 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/id_rank"
-        android:layout_width="wrap_content"
+        android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textColor="#FFEB3B"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/id_name"
         android:layout_width="216dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:text="University Name"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:autoSizeMaxTextSize="24sp"
-        app:autoSizeMinTextSize="18sp" />
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform" />
 
     <Button
-        android:id="@+id/id_change"
-        android:layout_width="wrap_content"
+        android:id="@+id/id_btnUp"
+        android:layout_width="10dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Change Position" />
+        android:background="@drawable/ic_baseline_arrow_upward_24" />
+
+    <Button
+        android:id="@+id/id_btnDown"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/ic_baseline_arrow_downward_24" />
 
     <Button
         android:id="@+id/id_del"
-        android:layout_width="wrap_content"
+        android:layout_width="10dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Delete" />
+        android:background="@drawable/ic_baseline_close_24" />
 
 </LinearLayout>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1054882901770",
+    "firebase_url": "https://youniversity-129ab.firebaseio.com",
+    "project_id": "youniversity-129ab",
+    "storage_bucket": "youniversity-129ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054882901770:android:5bb5e28a945fa25bc654f3",
+        "android_client_info": {
+          "package_name": "com.adityaamk.youniversity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1054882901770-b8d6erlnic4otv58t99eh4su9utrt268.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-nDsZKdqbTZOVIyNKLELMD8Ue9la6N6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1054882901770-b8d6erlnic4otv58t99eh4su9utrt268.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,22 +15,19 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, SearchFragment.SearchFragmentListener, ChangeDIalog.ChangeDialogListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, SearchFragment.SearchFragmentListener, ChangeDialog.ChangeDialogListener {
     ArrayList<University> universities;
-    HomeFragment homeFragment;
     SearchFragment searchFragment;
     ListFragment listFragment;
-    GraphFragment graphFragment;
+    ProfileFragment profileFragment;
     Fragment fragment;
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
-            case R.id.navigation_home:
-                fragment = homeFragment;
-                break;
             case R.id.navigation_search:
                 fragment = searchFragment;
                 break;
@@ -38,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 fragment = listFragment;
                 break;
             case R.id.profile_target:
-                fragment = graphFragment;
+                fragment = profileFragment;
                 break;
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
@@ -49,11 +46,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        homeFragment = new HomeFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
         searchFragment = new SearchFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).commit();
         listFragment = new ListFragment();
-        graphFragment = new GraphFragment();
+        profileFragment = new ProfileFragment();
         universities = new ArrayList<>();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final Gson gson = new Gson();
@@ -66,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void sendData(ArrayList<University> schools) {
+        universities = new ArrayList<>();
         universities.addAll(schools);
         listFragment.updateList(universities);
-        graphFragment.updateList(universities);
     }
 
     @Override

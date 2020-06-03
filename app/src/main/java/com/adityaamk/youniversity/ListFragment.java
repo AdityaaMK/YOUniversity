@@ -2,12 +2,10 @@ package com.adityaamk.youniversity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Presentation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +26,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ListFragment extends Fragment {
     private ArrayList<University> universities, uni2;
@@ -52,15 +48,11 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ListView listView = view.findViewById(R.id.id_lv);
-        save = view.findViewById(R.id.button2);
-                sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                final Gson gson = new Gson();
-                String json = sharedPreferences.getString(getString(R.string.project_id), null);
-                Type type = new TypeToken<ArrayList<University>>() {}.getType();
-                universities = gson.fromJson(json, type);
-//                if (universities == null) {
-//                    universities = new ArrayList<>();
-//                }
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Gson gson = new Gson();
+        String json = sharedPreferences.getString(getString(R.string.project_id), null);
+        Type type = new TypeToken<ArrayList<University>>() {}.getType();
+        universities = gson.fromJson(json, type);
 
         customAdapter = new CustomAdapter(Objects.requireNonNull(getContext()),R.layout.layout_listitem,universities);
         if(universities!=null) listView.setAdapter(customAdapter);
@@ -81,33 +73,81 @@ public class ListFragment extends Fragment {
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            assert layoutInflater != null;
             @SuppressLint("ViewHolder") View layoutView = layoutInflater.inflate(R.layout.layout_listitem,null);
             TextView rank = layoutView.findViewById(R.id.id_rank);
             TextView name = layoutView.findViewById(R.id.id_name);
-            Button change = layoutView.findViewById(R.id.id_change);
+            Button up = layoutView.findViewById(R.id.id_btnUp);
+            Button down = layoutView.findViewById(R.id.id_btnDown);
             Button delete = layoutView.findViewById(R.id.id_del);
-            change.setOnClickListener(new View.OnClickListener() {
+
+            //Change button was not working so replaced with up and down buttons
+//            change.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    try {
+//                        //openDialog();
+//
+//                    }catch (IndexOutOfBoundsException e){
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            });
+
+            up.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     try {
-                        openDialog();
+                        University temp = universities.get(position);
+                        University temp2 = universities.get(position - 1);
+                        universities.set(position, temp2);
+                        universities.set(position - 1, temp);
+                        notifyDataSetChanged();
+                        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        editor = sharedPreferences.edit();
+                        final Gson gson = new Gson();
+                        String json = gson.toJson(universities);
+                        editor.putString(getString(R.string.project_id), json);
+                        editor.apply();
                     }catch (IndexOutOfBoundsException e){
                         e.printStackTrace();
                     }
-
                 }
             });
+
+            down.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        University temp = universities.get(position);
+                        University temp2 = universities.get(position + 1);
+                        universities.set(position, temp2);
+                        universities.set(position + 1, temp);
+                        notifyDataSetChanged();
+                        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        editor = sharedPreferences.edit();
+                        final Gson gson = new Gson();
+                        String json = gson.toJson(universities);
+                        editor.putString(getString(R.string.project_id), json);
+                        editor.apply();
+                    }catch (IndexOutOfBoundsException e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     universities.remove(position);
+                    notifyDataSetChanged();
                     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                     editor = sharedPreferences.edit();
                     final Gson gson = new Gson();
                     String json = gson.toJson(universities);
                     editor.putString(getString(R.string.project_id), json);
                     editor.apply();
-                    notifyDataSetChanged();
                 }
             });
             name.setText(universities.get(position).getName());
@@ -117,8 +157,8 @@ public class ListFragment extends Fragment {
     }
 
     public void openDialog(){
-        ChangeDIalog changeDIalog = new ChangeDIalog();
-        changeDIalog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "Change Dialog");
+        ChangeDialog changeDialog = new ChangeDialog();
+        changeDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "Change Dialog");
     }
 
 }
