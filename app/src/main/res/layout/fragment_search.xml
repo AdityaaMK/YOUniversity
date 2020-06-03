@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout_editor_absoluteY="81dp"
-    android:background="@color/cardview_shadow_start_color"
-    tools:ignore="PrivateResource">
+    android:background="@drawable/walpaper"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:ignore="PrivateResource"
+    tools:layout_editor_absoluteY="81dp">
 
     <EditText
         android:id="@+id/id_edName"
@@ -15,8 +17,10 @@
         android:layout_marginTop="50dp"
         android:ems="10"
         android:gravity="center"
+        android:hint="Enter School Name"
         android:inputType="textPersonName"
-        android:text="Enter School Name"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +32,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
+        android:background="#000000"
         android:text="Search"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_edName" />
@@ -39,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="School Name:"
-        android:textColor="@android:color/black"
+        android:textColor="#FFFFFF"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,8 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
-        android:text="Safe SAT Range (25th to 75th percentile):"
-        android:textColor="@android:color/black"
+        android:text="Target SAT Range (25th to 75th percentile):"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_rate" />
@@ -63,8 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
-        android:text="Safe ACT Range (25th to 75th percentile):"
-        android:textColor="@android:color/black"
+        android:text="Target ACT Range (25th to 75th percentile):"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_sat" />
@@ -76,7 +82,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="25dp"
         android:text="Admissions Rate: "
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_nameTv" />
@@ -88,7 +94,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:text="Cost of Attendance:"
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_act" />
@@ -100,7 +106,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:text="Tuition (in-state):"
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_cost" />
@@ -112,7 +118,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:text="Tuition (out-of-state):"
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_tuitInState" />
@@ -124,7 +130,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:text="Average Debt:"
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_tuitOutState" />
@@ -136,33 +142,35 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:text="Locale:"
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_debt" />
 
     <TextView
         android:id="@+id/id_schoolurl"
-        android:autoLink="web"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
+        android:autoLink="web"
+        android:textColorLink="#FFEB3B"
         android:text="School Homepage:"
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_locale" />
 
     <TextView
         android:id="@+id/id_NPCurl"
-        android:autoLink="web"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
+        android:autoLink="web"
+        android:textColorLink="#FFEB3B"
         android:text="Net Price Calculator:"
-        android:textColor="@android:color/black"
+        android:textColor="#FFEB3B"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_schoolurl" />
@@ -172,7 +180,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:background="#000000"
         android:text="Add School To List"
+        android:textColor="#FFEB3B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,9 +32,9 @@ import java.util.Objects;
 
 public class Register extends AppCompatActivity {
     public static final String TAG = "TAG";
-    EditText mFullName,mEmail,mPassword,mPhone;
-    Button mRegisterBtn;
-    TextView mLoginBtn;
+    EditText FullName, Email, Password, Phone;
+    Button RegisterBtn;
+    TextView LoginBtn;
     FirebaseAuth fAuth;
     ProgressBar progressBar;
     FirebaseFirestore fStore;
@@ -44,49 +46,49 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mFullName   = findViewById(R.id.fullName);
-        mEmail      = findViewById(R.id.Email);
-        mPassword   = findViewById(R.id.password);
-        mPhone      = findViewById(R.id.phone);
-        mRegisterBtn= findViewById(R.id.registerBtn);
-        mLoginBtn   = findViewById(R.id.createText);
+        FullName = findViewById(R.id.fullName);
+        Email = findViewById(R.id.Email);
+        Password = findViewById(R.id.password);
+        Phone = findViewById(R.id.phone);
+        RegisterBtn = findViewById(R.id.registerBtn);
+        LoginBtn = findViewById(R.id.createText);
 
         fAuth = FirebaseAuth.getInstance(); // getting current instance of database to register user
         fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressBar);
 
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
+        LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
         });
 
-        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+        RegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-                final String fullName = mFullName.getText().toString().trim();
-                final String phone    = mPhone.getText().toString().trim();
+                final String emailtxt = Email.getText().toString().trim();
+                final String passwordtxt = Password.getText().toString().trim();
+                final String fullNametxt = FullName.getText().toString().trim();
+                final String phonetxt    = Phone.getText().toString().trim();
 
-                if(TextUtils.isEmpty(fullName)){
-                    mEmail.setError("Full Name is Required.");
+                if(TextUtils.isEmpty(fullNametxt)){
+                    Email.setError("Full Name is Required.");
                     return;
                 }
 
-                if(TextUtils.isEmpty(email)){
-                    mEmail.setError("Email is Required.");
+                if(TextUtils.isEmpty(emailtxt)){
+                    Email.setError("Email is Required.");
                     return;
                 }
 
-                if(TextUtils.isEmpty(password)){
-                    mPassword.setError("Password is Required.");
+                if(TextUtils.isEmpty(passwordtxt)){
+                    Password.setError("Password is Required.");
                     return;
                 }
 
-                if(password.length() < 6){
-                    mPassword.setError("Password Must be >= 6 Characters");
+                if(passwordtxt.length() < 6){
+                    Password.setError("Password Must be >= 6 Characters");
                     return;
                 }
 
@@ -94,7 +96,7 @@ public class Register extends AppCompatActivity {
 
                 // register the user in firebase
 
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                fAuth.createUserWithEmailAndPassword(emailtxt, passwordtxt).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
@@ -121,9 +123,9 @@ public class Register extends AppCompatActivity {
                             //Storing User Profile data in Firebase Firestore
                             DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String,Object> user = new HashMap<>();
-                            user.put("fName",fullName);
-                            user.put("email",email);
-                            user.put("phone",phone);
+                            user.put("fName",fullNametxt);
+                            user.put("email",emailtxt);
+                            user.put("phone",phonetxt);
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -138,7 +140,11 @@ public class Register extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
                         }else {
-                            Toast.makeText(Register.this, "Error! " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast toast = Toast.makeText(Register.this, "Error! " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+                            TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                            v.setTextColor(Color.RED);
+                            toast.show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }

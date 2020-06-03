@@ -13,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-public class ChangeDIalog extends AppCompatDialogFragment {
+import java.util.Objects;
+
+public class ChangeDialog extends AppCompatDialogFragment {
     private EditText one, two;
     private ChangeDialogListener listener;
 
@@ -22,7 +24,7 @@ public class ChangeDIalog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View view = inflater.inflate(R.layout.layout_dialogbro, null);
 
         builder.setView(view)

@@ -69,7 +69,7 @@ public class SearchFragment extends Fragment {
         editor = sharedPreferences.edit();
         final Gson gson = new Gson();
         String json = gson.toJson(universities);
-        editor.putString(getString(R.string.common_google_play_services_enable_button), json);
+        editor.putString(getString(R.string.project_id), json);
         editor.apply();
     }
 
@@ -78,7 +78,7 @@ public class SearchFragment extends Fragment {
         super.onResume();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         final Gson gson = new Gson();
-        String json = sharedPreferences.getString(getString(R.string.common_google_play_services_enable_button), null);
+        String json = sharedPreferences.getString(getString(R.string.project_id), null);
         Type type = new TypeToken<ArrayList<University>>() {}.getType();
         if(gson.fromJson(json, type)!=null) {
             universities = gson.fromJson(json, type);
@@ -88,7 +88,7 @@ public class SearchFragment extends Fragment {
     String url = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=princeton+university&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
 
     public interface SearchFragmentListener{
-        public void sendData(ArrayList<University> schools);
+        void sendData(ArrayList<University> schools);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class SearchFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         final Gson gson = new Gson();
-        String json = sharedPreferences.getString(getString(R.string.common_google_play_services_enable_button), null);
+        String json = sharedPreferences.getString(getString(R.string.project_id), null);
         Type type = new TypeToken<ArrayList<University>>() {}.getType();
         if(gson.fromJson(json, type)!=null) {
             universities = gson.fromJson(json, type);
@@ -158,7 +158,9 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 input = s.toString();
-                new NameGuide().execute(input);
+                if(!input.equals("")) {
+                    new NameGuide().execute(input);
+                }
             }
 
             @Override
@@ -177,6 +179,7 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("StaticFieldLeak")
     public class NameGuide extends  AsyncTask<String, Void, Void>{
 
         @Override
@@ -247,7 +250,7 @@ public class SearchFragment extends Fragment {
                 final University dream = new University(schoolName);
 
                 name.setText(schoolName);
-                sat.setText("Safe SAT Range (25th to 75th percentile): " + (lowEnglish + lowMath) + " to " + (highEnglish + highMath));
+                sat.setText("Target SAT Range (25th to 75th percentile): " + (lowEnglish + lowMath) + " to " + (highEnglish + highMath));
                 cost.setText("Cost of Attendance: $" + costInt);
                 debt.setText("Average Debt: $"  + debtDub);
                 rate.setText("Admissions Rate: " + (admitRate*100));
@@ -287,7 +290,7 @@ public class SearchFragment extends Fragment {
                 try {
                     double lowACT = (double) schoolInfo.get("latest.admissions.act_scores.25th_percentile.cumulative");
                     double highACT = (double) schoolInfo.get("latest.admissions.act_scores.75th_percentile.cumulative");
-                    act.setText("Safe ACT Range (25th to 75th percentile): "+lowACT+" to "+highACT);
+                    act.setText("Target ACT Range (25th to 75th percentile): "+lowACT+" to "+highACT);
                 } catch (ClassCastException e){
                     act.setText("ACT Range: N/A");
                 }
