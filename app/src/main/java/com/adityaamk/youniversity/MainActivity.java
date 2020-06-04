@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNav.setOnNavigationItemSelectedListener(this);
     }
 
+    // Sending updated data to fragment
     @Override
     public void sendData(ArrayList<University> schools) {
         universities = new ArrayList<>();
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         listFragment.updateList(universities);
     }
 
+    // Did not use, originally for Change button instead of up and down arrows
     @Override
     public void applyTexts(String posOne, String posTwo) {
         int one = Integer.parseInt(posOne);

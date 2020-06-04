@@ -28,11 +28,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class ListFragment extends Fragment {
-    private ArrayList<University> universities, uni2;
+    private ArrayList<University> universities;
     private CustomAdapter customAdapter;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private Button save;
 
     void updateList(ArrayList<University> unis){
         universities = unis;
@@ -48,6 +47,8 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ListView listView = view.findViewById(R.id.id_lv);
+
+        // retrieving last instance of the universities list
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         final Gson gson = new Gson();
         String json = sharedPreferences.getString(getString(R.string.project_id), null);

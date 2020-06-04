@@ -18,6 +18,7 @@ import java.util.Objects;
 public class ChangeDialog extends AppCompatDialogFragment {
     private EditText one, two;
     private ChangeDialogListener listener;
+    //Did not use, originally for Change button instead of up and down arrows
 
     @NonNull
     @Override

@@ -57,18 +57,15 @@ public class SearchFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
-//    void updateList(ArrayList<University> unis){
-//        universities = unis;
-//        Log.d("TAGGS", ""+universities);
-//    }
-
     @Override
     public void onStop() {
         super.onStop();
+        // saving list into json string
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         editor = sharedPreferences.edit();
         final Gson gson = new Gson();
         String json = gson.toJson(universities);
+        Log.d("TAGGER", json);
         editor.putString(getString(R.string.project_id), json);
         editor.apply();
     }
@@ -76,6 +73,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // retrieving list from json string
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         final Gson gson = new Gson();
         String json = sharedPreferences.getString(getString(R.string.project_id), null);
@@ -84,8 +82,6 @@ public class SearchFragment extends Fragment {
             universities = gson.fromJson(json, type);
         }
     }
-
-    String url = "https://api.data.gov/ed/collegescorecard/v1/schools?school.name=princeton+university&fields=school.name,id,latest.admissions.admission_rate.overall,latest.admissions.act_scores.25th_percentile.cumulative,latest.admissions.act_scores.75th_percentile.cumulative,latest.admissions.sat_scores.25th_percentile.math,latest.admissions.sat_scores.75th_percentile.math,latest.admissions.sat_scores.25th_percentile.critical_reading,latest.admissions.sat_scores.75th_percentile.critical_reading,latest.cost.attendance.academic_year,latest.aid.median_debt.completers.overall&api_key=LN3juTnlHfdAMGFmjsy7t9SniPWOx1WzFCU8lIeq";
 
     public interface SearchFragmentListener{
         void sendData(ArrayList<University> schools);
@@ -159,6 +155,7 @@ public class SearchFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 input = s.toString();
                 if(!input.equals("")) {
+                    // NameGuide to show name of university as user is searching
                     new NameGuide().execute(input);
                 }
             }
@@ -222,6 +219,7 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    // Async Task retrieving statistics
     @SuppressLint("StaticFieldLeak")
     public class UniversityData extends AsyncTask<String, Void, Void> {
         @Override
