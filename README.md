@@ -1,4 +1,4 @@
 # YOUniversity
-Firebase App to develop your college list based on relevant info from the Department of Education College Scorecard Database.
+Firebase App to develop your college list based on relevant info from the Department of Education College Scorecard API.
 
 ![](App.mov)
